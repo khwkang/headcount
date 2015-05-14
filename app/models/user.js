@@ -23,10 +23,10 @@ var User = db.Model.extend({
       });
   },
   invites: function() {
-    return this.hasMany('Invite', 'user_id');
+    return this.hasMany('Invite', 'id');
   },
   events: function() {
-    return this.hasMany('Event', 'user_id');
+    return this.hasMany('Event', 'id');
   }
 });
 

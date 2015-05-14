@@ -33,7 +33,7 @@ angular.module('headcount.auth', [])
   };
 
   $scope.signup = function () {
-
+    console.log($scope.user);
     return $http({
       method: 'POST',
       url: '/auth/local-signup',
