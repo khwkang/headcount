@@ -74,10 +74,16 @@ passport.use(new FacebookStrategy({
 },
 //FB will send back token and profile
 function(accessToken, refreshToken, profile, done) {
-  console.log(profile);
-
-
+  console.log('FACEBOOK strategy');
+  // console.log(profile);
+  new User({username: 'JT'})
+    .fetch()
+    .then(function(res){
+      console.log(res);
+    });
+  // console.log(new User.findOrCreate);
   User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    // console.log('FB FindOrCreate');
     return done(err, user);
   });
 }));

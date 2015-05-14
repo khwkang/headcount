@@ -19,10 +19,12 @@ function handleAuth(req, res, username, id) {
 
 // Facebook OAuth Initiation
 router.get('/facebook', passport.authenticate('facebook'), function(req, res){
+  console.log('FACEBOOK!');
 });
 
 // Facebook OAuth Callback
-router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '#/signup' }), function(req, res) {
+router.get('/facebook-callback', passport.authenticate('facebook', { failureRedirect: '#/signup' }), function(req, res) {
+  console.log('FACEBOOK! Callback');
   res.redirect('#/signin');
 });
 
