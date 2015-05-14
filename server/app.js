@@ -58,9 +58,12 @@ passport.serializeUser(function(user, done) {
   console.log('Serializing User!!!' + user);
   done(null, user);
 });
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser(function(id, done) {
   console.log('Deserializing User!!!' + user);
-  done(null, obj);
+  // done(null, obj);
+  User.findById(id, function(err, user) {
+            done(err, user);
+        });
 });
 
 // Facebook Passport OAuth
@@ -69,7 +72,11 @@ passport.use(new FacebookStrategy({
   clientSecret: oauth.ids.facebook.clientSecret,
   callbackURL: oauth.ids.facebook.callbackURL
 },
+//FB will send back token and profile
 function(accessToken, refreshToken, profile, done) {
+  console.log(profile);
+
+
   User.findOrCreate({ facebookId: profile.id }, function (err, user) {
     return done(err, user);
   });
