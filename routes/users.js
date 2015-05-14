@@ -45,7 +45,7 @@ router.post('/checkUser', function(req, res, done) {
       for (var i = 0; i < inviteModels.length; i++) {
 
         if (inviteModels[i].attributes.joined || inviteModels[i].attributes.declined) {
-          currentInvites.push(inviteModels[i].attributes.event_id)
+          currentInvites.push(inviteModels[i].attributes.events_idEvents)
         }
       }
 

@@ -36,13 +36,14 @@ router.get('/events-fetch', function(req, res, next) {
 router.get('/invite-events-fetch', function(req, res, next) {
 
   var invites = [];
+  console.log('req.session.user_id',req.session.user_id);
 
   new Invite()
     .query({ where: {users_idUsers: req.session.user_id} })
     .fetchAll()
     .then(function(collection) {
       for (var i = 0; i < collection.length; i++) {
-        invites.push(parseInt(collection.at(i).attributes.event_id));
+        invites.push(parseInt(collection.at(i).attributes.events_idEvents));
       }
       res.json(invites);
     });
@@ -228,7 +229,8 @@ router.post('/events-create', function(req, res) {
   for (var i = 0; i < inviteNum; i++) {
     inviteeIds.push(eventData.invited[i]);
   }
-
+  console.log('req.session.user_id',req.session.user_id);
+  
   new Event({
     title: eventData.title,
     description: eventData.description,

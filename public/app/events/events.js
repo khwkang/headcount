@@ -179,7 +179,7 @@ $scope.user = {
     $scope.invitedUsers = inv;
 
     $scope.newEvent.invited = $scope.invitedUsers;
-    // console.log('Event details', $scope.newEvent);
+    console.log('Event details', $scope.newEvent);
     return $http({
       method: 'POST',
       url: '/events-create',
