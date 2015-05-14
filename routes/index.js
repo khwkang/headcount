@@ -4,6 +4,7 @@ var qs = require('querystring');
 var request = require('request');
 
 var payOutEvent = require('./../utils/payments.js');
+var StripeEvent = require('./../utils/stripe.js');
 var attendance = require('./../utils/invites.js');
 var User = require('./../app/models/user.js');
 var Event = require('./../app/models/event.js');
