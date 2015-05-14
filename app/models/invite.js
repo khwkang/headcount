@@ -6,10 +6,10 @@ var Invite = db.Model.extend({
   tableName: 'invites',
   hasTimestamps: true,
   user: function() {
-    return this.belongsTo('User', 'user_id');
+    return this.belongsTo('User', 'id');
   },
   event: function() {
-    return this.belongsTo('Event', 'event_id');
+    return this.belongsTo('Event', 'id');
   }
 });
 

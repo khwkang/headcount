@@ -4,7 +4,6 @@ var qs = require('querystring');
 var request = require('request');
 
 var payOutEvent = require('./../utils/payments.js');
-var StripeEvent = require('./../utils/stripe.js');
 var attendance = require('./../utils/invites.js');
 var User = require('./../app/models/user.js');
 var Event = require('./../app/models/event.js');
@@ -17,12 +16,12 @@ router.get('/', function(req, res, next) {
 
 
 /**
- * Fetches all events from database with query where user_id matches current session user
+ * Fetches all events from database with query where host_id matches current session user
  */
 router.get('/events-fetch', function(req, res, next) {
 
   new Event()
-    .query({ where: {user_id: req.session.user_id} })
+    .query({ where: {host_id: req.session.user_id} })
     .fetchAll()
     .then(function(collection) {
       if (!collection) {
@@ -37,13 +36,14 @@ router.get('/events-fetch', function(req, res, next) {
 router.get('/invite-events-fetch', function(req, res, next) {
 
   var invites = [];
+  console.log('req.session.user_id',req.session.user_id);
 
   new Invite()
-    .query({ where: {user_id: req.session.user_id} })
+    .query({ where: {users_idUsers: req.session.user_id} })
     .fetchAll()
     .then(function(collection) {
       for (var i = 0; i < collection.length; i++) {
-        invites.push(parseInt(collection.at(i).attributes.event_id));
+        invites.push(parseInt(collection.at(i).attributes.events_idEvents));
       }
       res.json(invites);
     });
@@ -141,9 +141,9 @@ router.post('/invite-response', function(req, res) {
           var totalMoney = event.get('thresholdMoney');
           var title = event.get('title');
           var paid = event.get('paid');
-          var receivingUserId = event.get('user_id');
+          var receivingUserId = event.get('users_idUsers');
           var inviteModels = event.related('invites').models;
-          var eventCreatorsVenmoId = event.related('user').attributes.venmoUserId;
+          // var eventCreatorsVenmoId = event.related('user').attributes.venmoUserId;
 
           if (paid) {
             console.log('This event has already been paid out!');
@@ -164,8 +164,8 @@ router.post('/invite-response', function(req, res) {
               event.set('paid', true);
 
               for (var i = 0; i < inviteModels.length; i++) {
-                var payingUserId = inviteModels[i].attributes.user_id;
-
+                var payingUserId = inviteModels[i].attributes.users_idUsers;
+ 
                 if (payingUserId) {
                   payingUserIds.push(payingUserId);
                 }
@@ -229,7 +229,8 @@ router.post('/events-create', function(req, res) {
   for (var i = 0; i < inviteNum; i++) {
     inviteeIds.push(eventData.invited[i]);
   }
-
+  console.log('req.session.user_id',req.session.user_id);
+  
   new Event({
     title: eventData.title,
     description: eventData.description,
@@ -239,7 +240,7 @@ router.post('/events-create', function(req, res) {
     committedPeople: 0,
     committedMoney: 0,
     paid: false,
-    user_id: req.session.user_id,
+    host_id: req.session.user_id,
     image: eventData.image
   }).save()
     .then(function(model){

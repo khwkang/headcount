@@ -56,11 +56,12 @@ router.post('/local-signup', function(req, res, next) {
   new User({username:username})
     .fetch()
     .then(function(model){
+      console.log('model:', model);
       if (model) {
         return next(null);
       } else {
         new User({username:username,password:password},{isNew:true}).save()
-	        .then(function(model){
+	        .then(function(model){ 
 	          handleAuth(req, res, username, model.attributes.id);
 	        });
         }

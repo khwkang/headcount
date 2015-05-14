@@ -6,8 +6,8 @@ var Invite = require('./../app/models/invite.js');
  */
 var createInvite = function(eventId, invitedUserId, callback) {
     new Invite({
-      event_id: eventId,
-      user_id: invitedUserId
+      events_idEvents: eventId,
+      users_idUsers: invitedUserId
     }).save()
       .then(function(invite){
         callback(invite);
@@ -39,8 +39,8 @@ exports.createInvites = function(eventId, invitedUserIds, callback) {
 exports.updateInvite = function(userId, eventId, inviteAcceptedBool, callback) {
 
   new Invite({
-    user_id: userId,
-    event_id: eventId
+    users_idUsers: userId,
+    events_idEvents: eventId
   }).fetch().then(function(invite) {
 
     if (inviteAcceptedBool) {

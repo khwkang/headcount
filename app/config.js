@@ -35,7 +35,7 @@ db.plugin('registry');
 db.knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
     db.knex.schema.createTable('users', function (user) {
-      user.increments('idUsers').primary();
+      user.increments('id').primary();
       user.string('username', 100).unique();
       user.string('password', 100);
       user.string('email', 100);
@@ -80,7 +80,7 @@ db.knex.schema.hasTable('events').then(function(exists) {
       event.text('description');
       event.string('image',255);
       event.dateTime('expiration');
-      event.string('host', 100);
+      event.string('host_id', 100);
       event.integer('invites');
       event.integer('thresholdPeople');
       event.integer('thresholdMoney');

@@ -10,10 +10,10 @@ var Event = db.Model.extend({
   initialize: function(){
   },
   user: function() {
-    return this.belongsTo('User', 'user_id');
+    return this.belongsTo('User', 'id');
   },
   invites: function() {
-     return this.hasMany('Invite', 'event_id');
+     return this.hasMany('Invite', 'id');
   }
 });
 
