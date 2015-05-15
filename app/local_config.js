@@ -8,7 +8,7 @@ module.exports = require('knex')({
     charset  : 'utf8'
   },
   pool: {
-    min: 0,
-    max: 7
+    min: 2,
+    max: 10
   }
 });

@@ -26,7 +26,7 @@ var User = db.Model.extend({
     return this.hasMany('Invite', 'id');
   },
   events: function() {
-    return this.hasMany('Event', 'id');
+    return this.hasMany('Event', 'id');  
   }
 });
 

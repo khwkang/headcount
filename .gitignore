@@ -30,6 +30,9 @@ public/lib
 
 # Local config file for connecting to database
 
+# oauth information(ex. FB AppID & Secret)
+oauth.js
+
 
 # ubuntu procfile does not match mac procfile
 /Procfile

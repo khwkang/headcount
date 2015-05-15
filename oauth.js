@@ -1,7 +1,7 @@
 module.exports.ids = {
   facebook : {
-    clientID: '1013311812033385',
-    clientSecret: '986bbde72290ac76cba8e148a9824713',
+    clientID: '292348344222472',
+    clientSecret: '06e8a5e97568e246284a582f2f7f4a6a',
     callbackURL: '/auth/facebook-callback'
   },
   google : {

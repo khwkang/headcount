@@ -1,13 +1,9 @@
-// var Bookshelf = require('bookshelf');
+var Bookshelf = require('bookshelf');
 
 var knex =  !process.env.DATABASE_URL ? require('./local_config.js') :
   require('knex')({
   client: 'pg',
-  connection: process.env.DATABASE_URL,
-  pool: {
-    min: 0,
-    max: 7
-  }
+  connection: process.env.DATABASE_URL
 });
 
 
@@ -33,9 +29,11 @@ db.plugin('registry');
  * Columns email, firstName, lastName, shippingAddress and phoneNumber are currently not being used.
  */
 db.knex.schema.hasTable('users').then(function(exists) {
-  if (!exists) {
+  if (!exists) {  
     db.knex.schema.createTable('users', function (user) {
-      user.increments('id').primary();
+      user.increments('id').primary();  //MUST BE 'id'
+      user.string('fbId', 250).unique();
+      user.boolean('isLocal');
       user.string('username', 100).unique();
       user.string('password', 100);
       user.string('email', 100);

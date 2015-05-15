@@ -58,9 +58,12 @@ passport.serializeUser(function(user, done) {
   console.log('Serializing User!!!' + user);
   done(null, user);
 });
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser(function(id, done) {
   console.log('Deserializing User!!!' + user);
-  done(null, obj);
+  // done(null, obj);
+  User.findById(id, function(err, user) {
+            done(err, user);
+        });
 });
 
 // Facebook Passport OAuth
@@ -69,10 +72,48 @@ passport.use(new FacebookStrategy({
   clientSecret: oauth.ids.facebook.clientSecret,
   callbackURL: oauth.ids.facebook.callbackURL
 },
+//FB will send back token and profile
 function(accessToken, refreshToken, profile, done) {
-  User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-    return done(err, user);
+  console.log('FACEBOOK strategy');
+  console.log(profile);
+  
+  //find profile ID in DB
+
+    //if found
+      //login as that user
+    //else
+      //register that user by that ID
+
+
+  new User({fbId: profile.id}).fetch().then(function(user){
+    // if(err){ console.log('OMG!!!!!');return done(err); }
+    //does user exist?
+    if(user){
+      //Login as that user
+      console.log('User Login'+user);
+      return done(null, user);
+    }else{
+      //Create user, add to DB
+      console.log('User Create');
+
+      new User({
+        'fbId': profile.id,
+        'isLocal': false,
+        'firstName': profile.name.givenName,
+        'lastName': profile.name.familyName,
+      }, {isNew: true})
+      .save()
+      .then(function(err, newUser){
+        if(err){ console.log(err); }
+
+        return done(null, newUser);
+      });
+    }
   });
+  // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+  //   // console.log('FB FindOrCreate');
+  //   return done(err, user);
+  // });
 }));
 
 // Google Passport OAuth
