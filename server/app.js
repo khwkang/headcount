@@ -75,17 +75,45 @@ passport.use(new FacebookStrategy({
 //FB will send back token and profile
 function(accessToken, refreshToken, profile, done) {
   console.log('FACEBOOK strategy');
-  // console.log(profile);
-  new User({username: 'JT'})
-    .fetch()
-    .then(function(res){
-      console.log(res);
-    });
-  // console.log(new User.findOrCreate);
-  User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-    // console.log('FB FindOrCreate');
-    return done(err, user);
+  console.log(profile);
+  
+  //find profile ID in DB
+
+    //if found
+      //login as that user
+    //else
+      //register that user by that ID
+
+
+  new User({fbId: profile.id}).fetch().then(function(user){
+    // if(err){ console.log('OMG!!!!!');return done(err); }
+    //does user exist?
+    if(user){
+      //Login as that user
+      console.log('User Login'+user);
+      return done(null, user);
+    }else{
+      //Create user, add to DB
+      console.log('User Create');
+
+      new User({
+        'fbId': profile.id,
+        'isLocal': false,
+        'firstName': profile.name.givenName,
+        'lastName': profile.name.familyName,
+      }, {isNew: true})
+      .save()
+      .then(function(err, newUser){
+        if(err){ console.log(err); }
+
+        return done(null, newUser);
+      });
+    }
   });
+  // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+  //   // console.log('FB FindOrCreate');
+  //   return done(err, user);
+  // });
 }));
 
 // Google Passport OAuth
