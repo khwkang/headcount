@@ -178,6 +178,10 @@ $scope.user = {
     // console.log('inv',inv);
     $scope.invitedUsers = inv;
 
+    // Set the host of the event
+    $scope.newEvent.host = sessionStorage.getItem('user');
+
+
     $scope.newEvent.invited = $scope.invitedUsers;
     console.log('Event details', $scope.newEvent);
     return $http({

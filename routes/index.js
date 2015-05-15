@@ -19,9 +19,10 @@ router.get('/', function(req, res, next) {
  * Fetches all events from database with query where host_id matches current session user
  */
 router.get('/events-fetch', function(req, res, next) {
-
+  // console.log('session storage', window.sessionStorage.getItem('user'));
+  console.log('req.session',req.session.username);
   new Event()
-    .query({ where: {host_id: req.session.user_id} })
+    .query({ where: {host_id: req.session.user} })
     .fetchAll()
     .then(function(collection) {
       if (!collection) {
@@ -230,7 +231,8 @@ router.post('/events-create', function(req, res) {
     inviteeIds.push(eventData.invited[i]);
   }
   console.log('req.session.user_id',req.session.user_id);
-  
+  console.log('host', eventData.host)
+
   new Event({
     title: eventData.title,
     description: eventData.description,
@@ -240,7 +242,7 @@ router.post('/events-create', function(req, res) {
     committedPeople: 0,
     committedMoney: 0,
     paid: false,
-    host_id: req.session.user_id,
+    host_id: eventData.host,
     image: eventData.image
   }).save()
     .then(function(model){
