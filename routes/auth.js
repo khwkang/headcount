@@ -13,7 +13,7 @@ function handleAuth(req, res, username, id) {
     req.session.user = username;
     req.session.user_id = id.toString();
     console.log("SESSION!!! " + req.session.user + "ID!!! " + req.session.user_id);
-    res.end();
+    res.end();  
   });
 }
 
@@ -23,10 +23,19 @@ router.get('/facebook', passport.authenticate('facebook'), function(req, res){
 });
 
 // Facebook OAuth Callback
-router.get('/facebook-callback', passport.authenticate('facebook', { failureRedirect: '#/signup' }), function(req, res) {
-  console.log('FACEBOOK! Callback');
-  res.redirect('#/signin');
-});
+router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '#/signup' }), 
+  function(req, res) {
+    console.log('FACEBOOK! Callback', req.user);
+
+    new User({fbId: req.user.get("fbId")}).fetch().then(function(model) {
+      console.log("model",model)
+      handleAuth(req, res, model.get("fbId"), model.get("id"));
+      // res.end("this is the end");
+    });
+
+    // res.redirect('#/signin');
+  }
+);
 
 // Google OAuth Initiation
 router.get('/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }), function(req, res){

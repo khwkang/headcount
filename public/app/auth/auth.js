@@ -24,6 +24,7 @@ angular.module('headcount.auth', [])
       data: $scope.user
     })
     .then(function (resp) {
+      console.dir("auth resp", resp.config);
       $window.sessionStorage.setItem('user', resp.config.data.username);
       $window.location.href = "/";
     })
